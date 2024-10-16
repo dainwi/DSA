@@ -2,216 +2,93 @@ class Node {
     int data;
     Node next;
 
-    // Constructor to initialize node with data
-    Node(int data) {
-        this.data = data;
-        this.next = null;
+    Node(int new_data) {
+        data = new_data;
+        next = null;
     }
 }
 
-public class LinkedL {
+class LinkedL {
     Node head;
 
-    // Method to print all nodes of the list
-    public void printList() {
+    public void insert(int new_data) {
+        Node newNode = new Node(new_data);
         if (head == null) {
-            System.out.println("List is empty...");
-            return;
+            head = newNode;
+        } else {
+            Node currNode = head;
+            while (currNode.next != null) {
+                currNode = currNode.next;
+            }
+            currNode.next = newNode;
         }
+    }
 
+    public void printList() {
         Node currNode = head;
-        // Traverse the list and print each node's data
         while (currNode != null) {
-            System.out.print(currNode.data + " -> ");
+            System.out.print(currNode.data + " ");
             currNode = currNode.next;
         }
-        System.out.println("null");
+        System.out.println();
     }
 
-    // Insert a node at the beginning of the list
-    public void insertAtFirst(int data) {
-        Node newNode = new Node(data);
-        // If list is empty, make newNode the head
-        if (head == null) {
-            head = newNode;
-            return;
-        }
-
-        // Otherwise, set newNode to point to the current head and update head
-        newNode.next = head;
-        head = newNode;
-    }
-
-    // Insert a node at the given position in the list
-    public void insertInMiddle(int position, int data) {
-        Node newNode = new Node(data);
-
-        // If the position is 1, insert at the beginning
-        if (position == 1) {
-            insertAtFirst(data);
-            return;
-        }
-
-        Node tempNode = head;
-
-        // Traverse to the node before the given position
-        for (int i = 1; i < position - 1; i++) {
-            if (tempNode == null) {
-                System.out.println("Position out of bounds.");
-                return;
-            }
-            tempNode = tempNode.next;
-        }
-
-        if (tempNode == null) {
-            System.out.println("Position out of bounds :)");
-            return;
-        }
-
-        // Insert the new node by adjusting the links
-        newNode.next = tempNode.next;
-        tempNode.next = newNode;
-    }
-
-    // Insert a node at the end of the list
-    public void insert(int data) {
-        Node newNode = new Node(data);
-
-        // If list is empty, make newNode the head
-        if (head == null) {
-            head = newNode;
-            return;
-        }
-
-        // Traverse to the end of the list and insert the new node
-        Node tempNode = head;
-        while (tempNode.next != null) {
-            tempNode = tempNode.next;
-        }
-        tempNode.next = newNode;
-    }
-
-    // Delete the first node in the list
-    public void deleteAtFirst() {
-        if (head == null) {
-            System.out.println("List is already empty...");
-            return;
-        }
-
-        // Update head to the next node (deleting the first node)
-        head = head.next;
-    }
-
-    // Delete the last node in the list
-    public void deleteAtLast() {
-        if (head == null) {
-            System.out.println("List is already empty...");
-            return;
-        }
-
-        // If there is only one node, set head to null
-        if (head.next == null) {
-            head = null;
-            return;
-        }
-
-        // Traverse to the second last node
-        Node secondLastNode = head;
-        while (secondLastNode.next.next != null) {
-            secondLastNode = secondLastNode.next;
-        }
-
-        // Set the second last node's next to null (deleting the last node)
-        secondLastNode.next = null;
-    }
-
-    // Find and return the middle node of the list
-    public Node middleNode() {
-        int midNode = 0;
-
-        // First, count the total number of nodes
-        Node tempNode = head;
-        while (tempNode != null) {
-            midNode++;
-            tempNode = tempNode.next;
-        }
-
-        // Calculate the index of the middle node (2nd middle if even number of nodes)
-        midNode = midNode / 2;
-
-        // Reset tempNode to the head and traverse to the middle node
-        tempNode = head;
-        int count = 0;
-        while (tempNode != null) {
-            if (count == midNode) {
-                return tempNode; // Return the middle node when count reaches midNode
-            }
-            count++;
-            tempNode = tempNode.next;
-        }
-
-        return null; // In case the list is empty
-    }
-
-    public Node reverseList() {
-        Node prevNode = null;
+    public boolean search(int key) {
         Node currNode = head;
-        Node nextNode = null;
-
         while (currNode != null) {
-            nextNode = currNode.next;
-            currNode.next = prevNode;
-            prevNode = currNode;
-            currNode = nextNode;
+            if (currNode.data == key) {
+                return true;
+            }
+            currNode = currNode.next;
         }
-
-        head = prevNode;
-        return head;
+        return false;
     }
 
-    // Delete dupliacate
-    public Node deleteDuplicate() {
-        Node tempNode = head;
-
-        while (tempNode != null) {
-            Node nextNode = tempNode;
-            while (nextNode.next != null) {
-                if (tempNode.data == nextNode.next.data) {
-                    nextNode.next = nextNode.next.next;
-                } else {
-                    nextNode = nextNode.next;
-                }
-            }
-            tempNode = tempNode.next;
+    public void delete(int key) {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
         }
-        return head;
+
+        if (head.data == key) {
+            head = head.next;
+            return;
+        }
+
+        Node currNode = head;
+        Node prevNode = null;
+
+        while (currNode != null && currNode.data != key) {
+            prevNode = currNode;
+            currNode = currNode.next;
+        }
+
+        if (currNode == null) {
+            System.out.println("Element not found.");
+            return;
+        }
+
+        prevNode.next = currNode.next;
     }
 
     public static void main(String[] args) {
         LinkedL list = new LinkedL();
 
-        // Insert elements into the list
         list.insert(10);
         list.insert(20);
         list.insert(30);
         list.insert(40);
-        list.insert(40);
-        list.insert(50);
-        list.insert(60);
 
-        // Print the list
-        list.printList();
+        System.out.print("List: ");
+        list.printList(); // Outputs: 10 20 30 40
 
-        // Find the middle node
-        // Node midNode = list.middleNode();
+        System.out.println("Search 30: " + list.search(30)); // Outputs: true
+        System.out.println("Search 50: " + list.search(50)); // Outputs: false
 
-        // Check if midNode is null (for empty list)
-        // if (midNode != null) {
-        // System.out.println("Middle node data: " + midNode.data);
-        // } else {
-        // System.out.println("List is empty...");
-        // }
-        list.deleteDuplicate();
-        list.printList();
+        list.delete(20); // Deletes node with data 20
+        System.out.print("List after deletion: ");
+        list.printList(); // Outputs: 10 30 40
+
+        list.delete(50); // Tries to delete non-existent element
     }
 }
